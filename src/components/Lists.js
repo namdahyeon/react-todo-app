@@ -6,7 +6,7 @@ const Lists = React.memo(({ todoData, setTodoData, handleClick }) => {
   //React.memo(); 로 감싸면 렌더링을 최적화해줄 수 있다.
 
   const handleEnd = (result) => {
-    console.log("result", result);
+    console.log(result);
 
     if (!result.destination) return;
     const newTodoData = [...todoData];
@@ -18,6 +18,7 @@ const Lists = React.memo(({ todoData, setTodoData, handleClick }) => {
     // 원하는 자리에 reorderItem을 insert
     newTodoData.splice(result.destination.index, 0, reorderedItem);
     setTodoData(newTodoData);
+    localStorage.setItem("todoData", JSON.stringify(newTodoData));
   };
 
   return (
@@ -25,11 +26,7 @@ const Lists = React.memo(({ todoData, setTodoData, handleClick }) => {
       <DragDropContext onDragEnd={handleEnd}>
         <Droppable droppableId="todo">
           {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              {...provided.dragHandleProps}
-            >
+            <div {...provided.droppableProps} ref={provided.innerRef}>
               {todoData.map((data, index) => (
                 <Draggable
                   key={data.id}
@@ -51,7 +48,7 @@ const Lists = React.memo(({ todoData, setTodoData, handleClick }) => {
                   )}
                 </Draggable>
               ))}
-              {provided.placeholder}{" "}
+              {provided.placeholder}
               {/* 부자연스럽게 보이는 모션을 자연스럽게 만들어준다. */}
             </div>
           )}
